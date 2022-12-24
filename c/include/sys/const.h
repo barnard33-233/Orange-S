@@ -190,6 +190,10 @@ enum msgtype {
 	DEV_READ,
 	DEV_WRITE,
 	DEV_IOCTL
+
+	// /* alloc and free here */
+	// MM_ALLOC,
+	// MM_FREE
 };
 
 /* macros for messages */

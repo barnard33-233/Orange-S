@@ -20,6 +20,37 @@
 #include "global.h"
 #include "proto.h"
 
+int	ticks;
+
+int	disp_pos;
+
+u8			gdt_ptr[6];	/* 0~15:Limit  16~47:Base */
+struct descriptor	gdt[GDT_SIZE];
+u8			idt_ptr[6];	/* 0~15:Limit  16~47:Base */
+struct gate		idt[IDT_SIZE];
+
+u32	k_reenter;
+int	current_console;
+
+int	key_pressed; /**
+			      * used for clock_handler
+			      * to wake up TASK_TTY when
+			      * a key is pressed
+			      */
+
+struct tss	tss;
+struct proc*	p_proc_ready;
+
+MESSAGE			mm_msg;
+int			memory_size;
+
+/* FS */
+struct file_desc	f_desc_table[NR_FILE_DESC];
+struct inode		inode_table[NR_INODE];
+struct super_block	super_block[NR_SUPER_BLOCK];
+MESSAGE			fs_msg;
+struct proc *		pcaller;
+struct inode *		root_inode;
 
 PUBLIC	struct proc proc_table[NR_TASKS + NR_PROCS];
 
