@@ -16,6 +16,7 @@ BIN		= echo pwd
 
 BIN += mm_test
 BIN += stackoverflow
+BIN += hello
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -67,4 +68,10 @@ stackoverflow.o: stackoverflow.c ../include/type.h ../include/stdio.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 stackoverflow: stackoverflow.o start.o $(LIB)
+	$(LD) $(LDFLAGS) -o $@ $?
+
+hello.o: hello.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+hello: hello.o start.o $(LIB)
 	$(LD) $(LDFLAGS) -o $@ $?

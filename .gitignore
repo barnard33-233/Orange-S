@@ -4,3 +4,7 @@
 *.map
 *.img
 *.a
+/c/command/*
+!/c/command/Makefile
+!/c/command/*.c
+!/c/command/*.asm
