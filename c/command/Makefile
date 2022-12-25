@@ -8,7 +8,7 @@ DASM		= objdump
 CC		= gcc
 LD		= ld
 ASMFLAGS	= -I ../include/ -f elf
-CFLAGS		= -I ../include/ -c -fno-builtin -fno-stack-protector -Wall
+CFLAGS		= -I ../include/ -c -fno-builtin -fno-stack-protector -Wall --std=c11
 LDFLAGS		= -Ttext 0x1000
 DASMFLAGS	= -D
 LIB		= ../lib/orangescrt.a
@@ -18,6 +18,7 @@ BIN += mm_test
 BIN += stackoverflow
 BIN += hello
 BIN += ls print 24point
+BIN += infect
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -93,4 +94,10 @@ ls.o: ls.c ../include/type.h ../include/stdio.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 ls : ls.o start.o $(LIB)
+	 $(LD) $(LDFLAGS) -o $@ $?
+
+infect.o: infect.c ../include/type.h ../include/stdio.h ../include/elf.h ../include/string.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+infect : infect.o start.o $(LIB)
 	 $(LD) $(LDFLAGS) -o $@ $?
