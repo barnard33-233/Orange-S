@@ -25,6 +25,8 @@ PUBLIC void do_fork_test();
 
 PRIVATE void init_mm();
 
+PRIVATE char * mm_alloc_page(u32 * );
+PRIVATE void mm_free_page(u32 *, char *);
 /*****************************************************************************
  *                                task_mm
  *****************************************************************************/
@@ -34,6 +36,7 @@ PRIVATE void init_mm();
  *****************************************************************************/
 PUBLIC void task_mm()
 {
+	u32 bitmap = 0;
 	init_mm();
 
 	while (1) {
@@ -57,6 +60,12 @@ PUBLIC void task_mm()
 		case WAIT:
 			do_wait();
 			reply = 0;
+			break;
+		case MM_ALLOC:
+			mm_msg.ADDRESS = mm_alloc_page(&bitmap);
+			break;
+		case MM_FREE:
+			mm_free_page(&bitmap, mm_msg.ADDRESS);
 			break;
 		default:
 			dump_msg("MM::unknown msg", &mm_msg);
@@ -87,6 +96,36 @@ PRIVATE void init_mm()
 
 	/* print memory size */
 	printl("{MM} memsize:%dMB\n", memory_size / (1024 * 1024));
+}
+
+/*
+ * a demo of allocate page.
+ * only works in ring 1.
+*/
+PRIVATE char * mm_alloc_page(u32 * bitmap){
+	if(*bitmap == 0xffffffff){
+		return NULL;
+	}
+	// find the first free slot:
+	u32 mask = 1;
+	int i;
+	for(i = 0; i < 32; i ++){
+		mask << 1;
+		if(!(mask & *bitmap)){ // if selected bit == 1
+			break;
+		}
+	}
+	char * address = free_mem_area + i * PAGE_SIZE;
+	*bitmap |= mask;
+	return address;
+}
+
+PRIVATE void mm_free_page(u32 * bitmap, char * address){
+	int position = (address - free_mem_area) / PAGE_SIZE;
+	if(position >= 0 && position < 32){
+		u32 mask = ~(1 << position);
+		*bitmap &= mask;
+	}
 }
 
 /*****************************************************************************

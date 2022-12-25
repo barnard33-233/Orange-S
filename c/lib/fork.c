@@ -43,3 +43,22 @@ PUBLIC int fork()
 
 	return msg.PID;
 }
+
+PUBLIC void * alloc(void){
+	MESSAGE msg;
+	msg.type = MM_ALLOC;
+
+	send_recv(BOTH, TASK_MM, &msg);
+	assert(msg.type == SYSCALL_RET);
+
+	return msg.ADDRESS;
+}
+
+PUBLIC void free(void * address){
+	MESSAGE msg;
+	msg.type = MM_FREE;
+	msg.ADDRESS = address;
+
+	send_recv(BOTH, TASK_MM, &msg);
+	assert(msg.type == SYSCALL_RET);
+}

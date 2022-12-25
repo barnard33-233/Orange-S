@@ -14,6 +14,9 @@ DASMFLAGS	= -D
 LIB		= ../lib/orangescrt.a
 BIN		= echo pwd
 
+BIN += mm_test
+BIN += stackoverflow
+
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
 
@@ -34,7 +37,7 @@ clean :
 	rm -f *.o
 
 realclean :
-	rm -f $(BIN) *.o
+	rm -f $(BIN) *.o inst.tar *.bin
 
 kernel.bin :
 	cp ../kernel.bin ./
@@ -52,4 +55,16 @@ pwd.o: pwd.c ../include/type.h ../include/stdio.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 pwd : pwd.o start.o $(LIB)
+	$(LD) $(LDFLAGS) -o $@ $?
+
+mm_test.o: mm_test.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+mm_test: mm_test.o start.o $(LIB)
+	$(LD) $(LDFLAGS) -o $@ $?
+
+stackoverflow.o: stackoverflow.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+stackoverflow: stackoverflow.o start.o $(LIB)
 	$(LD) $(LDFLAGS) -o $@ $?

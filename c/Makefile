@@ -47,7 +47,7 @@ LOBJS		=  lib/syscall.o\
 DASMOUTPUT	= kernel.bin.asm
 
 # All Phony Targets
-.PHONY : everything final image clean realclean disasm all buildimg
+.PHONY : everything final image clean realclean disasm all buildimg command installcommand
 
 # Default starting position
 nop :
@@ -57,18 +57,28 @@ everything : $(ORANGESBOOT) $(ORANGESKERNEL)
 
 all : realclean everything
 
-image : realclean everything clean buildimg
+image : realclean everything clean buildimg installcommand
 
 clean :
 	rm -f $(OBJS) $(LOBJS)
 
 realclean :
 	rm -f $(OBJS) $(LOBJS) $(LIB) $(ORANGESBOOT) $(ORANGESKERNEL)
+	make -C command realclean
 
 disasm :
 	$(DASM) $(DASMFLAGS) $(ORANGESKERNEL) > $(DASMOUTPUT)
 
+command: command/*
+	make -C command final
+
+installcommand:
+	make -C command install
+
 buildimg :
+	-rm ./*.img
+	gzip -d 100m.img.gz --keep
+	gzip -d a.img.gz --keep
 	dd if=boot/boot.bin of=$(FD) bs=512 count=1 conv=notrunc
 	dd if=boot/hdboot.bin of=$(HD) bs=1 count=446 conv=notrunc
 	dd if=boot/hdboot.bin of=$(HD) seek=510 skip=510 bs=1 count=2 conv=notrunc

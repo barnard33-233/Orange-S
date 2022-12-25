@@ -8,6 +8,9 @@
 #ifndef	_ORANGES_CONST_H_
 #define	_ORANGES_CONST_H_
 
+#define PAGE_SIZE 0x1000
+#define NULL (void *)0
+
 /* max() & min() */
 #define	max(a,b)	((a) > (b) ? (a) : (b))
 #define	min(a,b)	((a) < (b) ? (a) : (b))
@@ -189,11 +192,11 @@ enum msgtype {
 	DEV_CLOSE,
 	DEV_READ,
 	DEV_WRITE,
-	DEV_IOCTL
+	DEV_IOCTL,
 
-	// /* alloc and free here */
-	// MM_ALLOC,
-	// MM_FREE
+	/* MM alloc and free*/
+	MM_ALLOC,
+	MM_FREE
 };
 
 /* macros for messages */
@@ -214,6 +217,8 @@ enum msgtype {
 #define	PID		u.m3.m3i2
 #define	RETVAL		u.m3.m3i1
 #define	STATUS		u.m3.m3i1
+
+#define ADDRESS u.m3.m3p1
 
 
 

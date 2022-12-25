@@ -60,5 +60,7 @@ extern	char *			logbuf;
 extern	const int		LOGBUF_SIZE;
 extern	char *			logdiskbuf;
 extern	const int		LOGDISKBUF_SIZE;
+extern char * free_mem_area;
+extern int FREE_MEM_SIZE;
 
 #endif

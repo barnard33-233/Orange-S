@@ -150,5 +150,8 @@ PUBLIC int	stat		(const char *path, struct stat *buf);
 /* lib/syslog.c */
 PUBLIC	int	syslog		(const char *fmt, ...);
 
+/* XXX add this to fork.c */
+PUBLIC void * alloc(void);
+PUBLIC void free(void * address);
 
 #endif /* _ORANGES_STDIO_H_ */
