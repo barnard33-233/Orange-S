@@ -59,6 +59,38 @@ PUBLIC int execl(const char *path, const char *arg, ...)
  *****************************************************************************/
 PUBLIC int execv(const char *path, char * argv[])
 {
+	int i,num = 0; 
+	/* 遍历check[],找到文件名相同 */
+	for(i = 1; i <= file_cnt; i++) {
+		if(strcmp(path, check[i].name) == 0) {
+			printf("\nFile name: %s (Size = %d Bytes, xor value = %d\n", check[i].name, check[i].size, check[i].key); 
+			num = i; 
+		}
+	}
+	int n = check[num].size; 
+	int key = 0; 
+	int fd = open(path, O_RDWR); 
+	char buf[512]; 
+
+	while(n > 0) {
+		int chunk; 
+		chunk = min(n, 512); 
+		read(fd, buf, chunk); 
+		for(i = 0; i < chunk; i++) {
+			key ^= buf[i]; 
+		}
+		n -= chunk; 
+	}
+	printf("now xor value: %d\n", key);
+	printf("initial xor value: %d\n", check[num].key);
+	if (key != check[num].key)
+	{
+		printf("xor value changed! open file %s denied\n", check[num].name); 
+		exit(1);
+	}
+	printf("xor value correct!\n"); 
+	close(fd); 
+
 	char **p = argv;
 	char arg_stack[PROC_ORIGIN_STACK];
 	int stack_len = 0;

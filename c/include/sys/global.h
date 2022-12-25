@@ -63,4 +63,14 @@ extern	const int		LOGDISKBUF_SIZE;
 extern char * free_mem_area;
 extern int FREE_MEM_SIZE;
 
+/* check */
+struct __CHECK {
+	char 	name[20]; 
+	int 	size; 
+	int 	key; 
+};
+extern struct __CHECK check[20]; 
+
+/* check file num */
+extern int file_cnt; 
 #endif

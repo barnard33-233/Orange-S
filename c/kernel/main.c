@@ -178,6 +178,7 @@ struct posix_tar_header
  * 
  * @param filename The tar file.
  *****************************************************************************/
+
 void untar(const char * filename)
 {
 	printf("[extract `%s'\n", filename);
@@ -188,6 +189,9 @@ void untar(const char * filename)
 	int chunk = sizeof(buf);
 	int i = 0;
 	int bytes = 0;
+
+	file_cnt = 0;//init
+	int key;//save checkxor
 
 	while (1) {
 		bytes = read(fd, buf, SECTOR_SIZE);
@@ -217,17 +221,34 @@ void untar(const char * filename)
 			close(fd);
 			return;
 		}
+
+		/* save file information */
+		file_cnt++;
+		for(i = 0; phdr->name[i]; i++) check[file_cnt].name[i] = phdr->name[i]; 
+		check[file_cnt].name[i] = 0; 
+		check[file_cnt].size = f_len;
+
 		printf("    %s", phdr->name);
-		while (bytes_left) {
+		/* init key */
+		key = 0; 
+		while (bytes_left)
+		{
 			int iobytes = min(chunk, bytes_left);
 			read(fd, buf,
 			     ((iobytes - 1) / SECTOR_SIZE + 1) * SECTOR_SIZE);
+			/* xor */
+			for (i = 0; i <= iobytes; i++) key ^= buf[i];
+
 			bytes = write(fdout, buf, iobytes);
 			assert(bytes == iobytes);
 			bytes_left -= iobytes;
 			printf(".");
 		}
-		printf("\n");
+
+		/* save xor value */
+		check[file_cnt].key = key; 
+		printf("[xor value: %d]\n", check[file_cnt].key);
+		
 		close(fdout);
 	}
 

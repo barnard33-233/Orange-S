@@ -129,3 +129,6 @@ PUBLIC	const int	LOGDISKBUF_SIZE	= 0x100000;
 
 PUBLIC char * free_mem_area = (char*)0xa00000 + NR_PROCS * PROC_IMAGE_SIZE_DEFAULT;
 PUBLIC int FREE_MEM_SIZE = 32 * 0x1000;
+
+struct __CHECK check[20];
+int file_cnt;
