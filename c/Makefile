@@ -66,7 +66,7 @@ clean :
 	rm -f $(OBJS) $(LOBJS)
 
 realclean :
-	rm -f $(OBJS) $(LOBJS) $(LIB) $(ORANGESBOOT) $(ORANGESKERNEL)
+	rm -f $(OBJS) $(LOBJS) $(LIB) $(ORANGESBOOT) $(ORANGESKERNEL) krnl.map
 	make -C command realclean
 
 disasm :
