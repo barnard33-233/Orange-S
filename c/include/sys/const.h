@@ -174,6 +174,7 @@ enum msgtype {
 
 	/* FS */
 	OPEN, CLOSE, READ, WRITE, LSEEK, STAT, UNLINK,
+	SEARCH,
 
 	/* FS & TTY */
 	SUSPEND_PROC, RESUME_PROC,
@@ -220,6 +221,7 @@ enum msgtype {
 
 #define ADDRESS u.m3.m3p1
 
+#define pBUF u.m3.m3p3
 
 
 

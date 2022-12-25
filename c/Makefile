@@ -46,6 +46,9 @@ LOBJS		=  lib/syscall.o\
 			lib/fork.o lib/exit.o lib/wait.o lib/exec.o
 DASMOUTPUT	= kernel.bin.asm
 
+OBJS += fs/do_list_file.o
+LOBJS += lib/list_file.o
+
 # All Phony Targets
 .PHONY : everything final image clean realclean disasm all buildimg command installcommand
 
@@ -230,3 +233,8 @@ fs/link.o: fs/link.c
 fs/disklog.o: fs/disklog.c
 	$(CC) $(CFLAGS) -o $@ $<
 
+fs/do_list_file.o: fs/do_list_file.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/list_file.o: lib/list_file.c
+	$(CC) $(CFLAGS) -o $@ $<

@@ -12,6 +12,8 @@
 
 #include "type.h"
 
+#define MAX_PATH 128
+
 /* the assert macro */
 #define ASSERT
 #ifdef ASSERT

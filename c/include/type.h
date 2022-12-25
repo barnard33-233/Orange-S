@@ -50,6 +50,7 @@ struct mess3 {
 	u64	m3l2;
 	void*	m3p1;
 	void*	m3p2;
+	char m3p3[100];
 };
 typedef struct {
 	int source;

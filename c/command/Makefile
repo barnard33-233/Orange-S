@@ -17,6 +17,7 @@ BIN		= echo pwd
 BIN += mm_test
 BIN += stackoverflow
 BIN += hello
+BIN += ls print 24point
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -75,3 +76,21 @@ hello.o: hello.c ../include/type.h ../include/stdio.h
 
 hello: hello.o start.o $(LIB)
 	$(LD) $(LDFLAGS) -o $@ $?
+
+print.o: print.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+print : print.o start.o $(LIB)
+	 $(LD) $(LDFLAGS) -o $@ $?
+
+24point.o: 24point.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+24point : 24point.o start.o $(LIB)
+	 $(LD) $(LDFLAGS) -o $@ $?
+
+ls.o: ls.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+ls : ls.o start.o $(LIB)
+	 $(LD) $(LDFLAGS) -o $@ $?

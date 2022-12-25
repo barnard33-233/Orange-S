@@ -77,6 +77,9 @@ PUBLIC void task_fs()
 		case STAT:
 			fs_msg.RETVAL = do_stat();
 			break;
+		case SEARCH:
+			do_list_file();
+			break;
 		default:
 			dump_msg("FS::unknown message:", &fs_msg);
 			assert(0);
@@ -94,12 +97,14 @@ PUBLIC void task_fs()
 		msg_name[FORK]   = "FORK";
 		msg_name[EXIT]   = "EXIT";
 		msg_name[STAT]   = "STAT";
+		msg_name[SEARCH] = "SEARCH";
 
 		switch (msgtype) {
 		case UNLINK:
 			dump_fd_graph("%s just finished. (pid:%d)",
 				      msg_name[msgtype], src);
 			//panic("");
+		case SEARCH:
 		case OPEN:
 		case CLOSE:
 		case READ:
@@ -354,7 +359,8 @@ PRIVATE void mkfs()
 		sprintf(pde->name, "dev_tty%d", i);
 	}
 	(++pde)->inode_nr = NR_CONSOLES + 2;
-	strcpy(pde->name, "cmd.tar");
+	// strcpy(pde->name, "cmd.tar");
+	sprintf(pde->name, "cmd.tar", i);
 	WR_SECT(ROOT_DEV, sb.n_1st_sect);
 }
 

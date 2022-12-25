@@ -251,64 +251,99 @@ void untar(const char * filename)
  * 
  * @param tty_name  TTY file name.
  *****************************************************************************/
-void shabby_shell(const char * tty_name)
-{
-	int fd_stdin  = open(tty_name, O_RDWR);
-	assert(fd_stdin  == 0);
-	int fd_stdout = open(tty_name, O_RDWR);
-	assert(fd_stdout == 1);
+void shabby_shell(const char* tty_name) {
+    int fd_stdin = open(tty_name, O_RDWR);
+    assert(fd_stdin == 0);
+    int fd_stdout = open(tty_name, O_RDWR);
+    assert(fd_stdout == 1);
 
-	char rdbuf[128];
+    char rdbuf[128];
 
-	while (1) {
-		write(1, "$ ", 2);
-		int r = read(0, rdbuf, 70);
-		rdbuf[r] = 0;
+    while (1) {
+        write(1, "$ ", 2);
+        int r = read(0, rdbuf, 70);
+        rdbuf[r] = 0;
 
-		int argc = 0;
-		char * argv[PROC_ORIGIN_STACK];
-		char * p = rdbuf;
-		char * s;
-		int word = 0;
-		char ch;
-		do {
-			ch = *p;
-			if (*p != ' ' && *p != 0 && !word) {
-				s = p;
-				word = 1;
-			}
-			if ((*p == ' ' || *p == 0) && word) {
-				word = 0;
-				argv[argc++] = s;
-				*p = 0;
-			}
-			p++;
-		} while(ch);
-		argv[argc] = 0;
+        int argc = 0;
+        char* argv[PROC_ORIGIN_STACK];
+        char* p = rdbuf;
+        char* s;
+        int word = 0;
+        char ch;
+        do {
+            ch = *p;
+            if (*p != ' ' && *p != 0 && !word) {
+                s = p;
+                word = 1;
+            }
+            if ((*p == ' ' || *p == 0) && word) {
+                word = 0;
+                argv[argc++] = s;
+                *p = 0;
+            }
+            p++;
+        } while (ch);
+        argv[argc] = 0;
 
-		int fd = open(argv[0], O_RDWR);
-		if (fd == -1) {
-			if (rdbuf[0]) {
-				write(1, "{", 1);
-				write(1, rdbuf, r);
-				write(1, "}\n", 2);
-			}
-		}
-		else {
-			close(fd);
-			int pid = fork();
-			if (pid != 0) { /* parent */
-				int s;
-				wait(&s);
-			}
-			else {	/* child */
-				execv(argv[0], argv);
-			}
-		}
-	}
+        int i;
+        int count = 1;  // count 用于计算总的指令个数
+        for (i = 0; i < argc; i++) {
+            // printf("%d: %s\n", i, argv[i]);
+            if (argv[i][0] == '&') {
+                count += 1;
+            }
+        }
 
-	close(1);
-	close(0);
+        char* sub_argv[PROC_ORIGIN_STACK];
+        int sub_argc = 0;
+        int children[10];
+        int childnum;
+        for (i = 0; i <= argc; i++) {
+            if (argv[i][0] != '&' && i != argc) {
+                sub_argv[sub_argc] = argv[i];
+                sub_argc += 1;
+            } else {
+                sub_argv[sub_argc] = 0;
+                // printf("%s,%d\n", sub_argv[0], sub_argc - 1);
+                int fd = open(sub_argv[0], O_RDWR);
+                if (fd == -1) {
+                    if (rdbuf[0]) {
+                        write(1, "{", 1);
+                        write(1, rdbuf, r);
+                        write(1, "}\n", 2);
+                    }
+                      count-- ;
+                } else {
+                    close(fd);
+
+                    int pid = fork();
+     		    milli_delay(500); //delay
+                    if (pid != 0) { /* parent */
+                        int s;
+                        // children[childnum++] = s;
+                        // wait(&s);
+                    } else { /* child */
+                        //__asm__ __volatile__("xchg %bx, %bx");
+                        execv(sub_argv[0], sub_argv);
+                        // printf("for test\n");
+                    }
+                }
+                sub_argc = 0;
+            }
+        }
+        int temp;  // 回收子进程, 提高稳定性
+        while (count--) {
+            int temp1 = wait(&temp);
+            // printf("%d\n", temp1);
+        }
+        // printf("here");
+
+        // for (i = 0; i < childnum; i++) {
+        //     wait(&children[childnum]);
+        // }
+    }
+    close(1);
+    close(0);
 }
 
 /*****************************************************************************

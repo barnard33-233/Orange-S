@@ -85,6 +85,8 @@ PUBLIC int		do_open();
 PUBLIC int		do_close();
 PUBLIC int		do_lseek();
 
+PUBLIC int do_list_file();
+
 /* fs/read_write.c */
 PUBLIC int		do_rdwt();
 
