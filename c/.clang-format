@@ -1,0 +1,11 @@
+---
+Language: Cpp
+ReflowComments: false
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+BreakBeforeBraces: GNU
+ColumnLimit: 100
+IndentWidth: 2
+UseTab: Never
+SortIncludes: false
