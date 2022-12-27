@@ -1,0 +1,15 @@
+---
+Language: C
+
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+
+BreakBeforeBraces: Attach
+
+ColumnLimit: 100
+IndentWidth: 2
+UseTab: Never
+SortIncludes: false
+...
