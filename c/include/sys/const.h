@@ -147,7 +147,7 @@
 #define	MAX_TICKS	0x7FFFABCD
 
 /* system call */
-#define NR_SYS_CALL	3
+#define NR_SYS_CALL	4
 
 /* ipc */
 #define SEND		1
@@ -303,6 +303,7 @@ enum msgtype {
 
 #define	NR_DEFAULT_FILE_SECTS	2048 /* 2048 * 512 = 1MB */
 
-
+// dynamic checking
+#define CKECK_INTERVAL 3
 
 #endif /* _ORANGES_CONST_H_ */

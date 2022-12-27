@@ -52,6 +52,36 @@ PUBLIC void schedule()
 	}
 }
 
+
+// sys_check_stack: dynamic protect
+
+
+PUBLIC int sys_check_stack(int _unused,int _unused2,char* _unused3,struct proc* p_proc) {
+ 
+    int ebp = p_proc->regs.ebp;
+    int retaddress_offset = ebp + 4;
+    int ss = p_proc->regs.ss;  
+    int base = reassembly(p_proc->ldts[ss >> 3].base_high, 24,
+                          p_proc->ldts[ss >> 3].base_mid, 16,
+                          p_proc->ldts[ss >> 3].base_low);
+    unsigned int retaddr = *(int*)(retaddress_offset + base);
+
+    printl("<%x>is return address\n",retaddr);
+
+    if (retaddr > (PROC_IMAGE_SIZE_DEFAULT - PROC_ORIGIN_STACK) || retaddr > 0x10000 || retaddr < 0x1000) {
+        
+            disp_str("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            disp_str(p_proc_ready->name);
+            disp_str("  : return address may be unsafe ");
+ 
+       
+    }
+
+    
+}
+
+
+
 /*****************************************************************************
  *                                sys_sendrec
  *****************************************************************************/

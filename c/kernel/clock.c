@@ -36,10 +36,14 @@ PUBLIC void clock_handler(int irq)
 
 	if (p_proc_ready->ticks)
 		p_proc_ready->ticks--;
+	p_proc_ready->delta_time++;
 
 	if (key_pressed)
 		inform_int(TASK_TTY);
 
+        if (p_proc_ready - &FIRST_PROC >= 0xb ){ 
+        check_stack();  
+    }
 	if (k_reenter != 0) {
 		return;
 	}
@@ -84,5 +88,11 @@ PUBLIC void init_clock()
         put_irq_handler(CLOCK_IRQ, clock_handler);    /* 设定时钟中断处理程序 */
         enable_irq(CLOCK_IRQ);                        /* 让8259A可以接收时钟中断 */
 }
+
+
+
+
+
+
 
 

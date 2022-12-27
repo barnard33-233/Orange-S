@@ -19,6 +19,7 @@ BIN += mm_test
 BIN += ls print 24point
 BIN += stackoverflow poc
 BIN += hello infect readelf
+BIN += poc2
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -112,4 +113,10 @@ poc.o: poc.c ../include/type.h ../include/stdio.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 poc : poc.o start.o $(LIB)
+	$(LD) $(LDFLAGS) -o $@ $?
+
+poc2.o: poc2.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+poc2 : poc2.o start.o $(LIB)
 	$(LD) $(LDFLAGS) -o $@ $?

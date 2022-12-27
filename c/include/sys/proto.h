@@ -150,3 +150,8 @@ PUBLIC  void    sys_call();             /* int_handler */
 /* 系统调用 - 用户级 */
 PUBLIC	int	sendrec(int function, int src_dest, MESSAGE* p_msg);
 PUBLIC	int	printx(char* str);
+
+// dynamic checking
+PUBLIC int sys_check_stack(int _unused, int _unused2, char * _unused3, struct proc * p_proc);
+
+PUBLIC int check_stack();
