@@ -4,9 +4,8 @@ AlignTrailingComments: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
-BreakBeforeBraces: Attach
+BreakBeforeBraces: GNU
 ColumnLimit: 100
 IndentWidth: 2
 UseTab: Never
 SortIncludes: false
-...
