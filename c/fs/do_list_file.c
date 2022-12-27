@@ -41,6 +41,7 @@ PUBLIC int do_list_file()
     {
       RD_SECT(dir_inode->i_dev, dir_blk0_nr + i);
       pde = (struct dir_entry *)fsbuf;
+      // FIXME need buffer overflow check
       for (j = 0; j < SECTOR_SIZE / DIR_ENTRY_SIZE; j++, pde++)
         {
           // printl("%s  ", pde->name);
