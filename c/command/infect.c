@@ -5,7 +5,6 @@
 #include "elf.h"
 
 #define PAGE_SIZE 0x1000
-#define breakpoint printf("--bp--\n")
 
 char shellcode[8] = {
   0x66, 0x87, 0xdb, // xchg bx, bx, "magic break"
@@ -63,9 +62,7 @@ void infect_elf(char* name){
 
 
   // get the ELF Header
-  breakpoint;
   read(target_fd, &ehdr, sizeof(ehdr));
-  breakpoint;
 
   // judge whether it is an elf-format file
   is_elf(ehdr);

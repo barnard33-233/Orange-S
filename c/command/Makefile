@@ -19,6 +19,7 @@ BIN += stackoverflow
 BIN += hello
 BIN += ls print 24point
 BIN += infect
+BIN += readelf
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -100,4 +101,10 @@ infect.o: infect.c ../include/type.h ../include/stdio.h ../include/elf.h ../incl
 	$(CC) $(CFLAGS) -o $@ $<
 
 infect : infect.o start.o $(LIB)
+	 $(LD) $(LDFLAGS) -o $@ $?
+
+readelf.o: readelf.c ../include/type.h ../include/stdio.h ../include/elf.h ../include/string.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+readelf : readelf.o start.o $(LIB)
 	 $(LD) $(LDFLAGS) -o $@ $?
