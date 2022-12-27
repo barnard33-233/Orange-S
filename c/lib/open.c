@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   open.c
  * @brief  open()
@@ -32,16 +32,16 @@
  *****************************************************************************/
 PUBLIC int open(const char *pathname, int flags)
 {
-	MESSAGE msg;
+  MESSAGE msg;
 
-	msg.type	= OPEN;
+  msg.type = OPEN;
 
-	msg.PATHNAME	= (void*)pathname;
-	msg.FLAGS	= flags;
-	msg.NAME_LEN	= strlen(pathname);
+  msg.PATHNAME = (void *)pathname;
+  msg.FLAGS = flags;
+  msg.NAME_LEN = strlen(pathname);
 
-	send_recv(BOTH, TASK_FS, &msg);
-	assert(msg.type == SYSCALL_RET);
+  send_recv(BOTH, TASK_FS, &msg);
+  assert(msg.type == SYSCALL_RET);
 
-	return msg.FD;
+  return msg.FD;
 }

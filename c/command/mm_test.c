@@ -1,9 +1,10 @@
 #include "stdio.h"
 #include "type.h"
 
-int main(int argc, char**argv){
-  char * address1;
-  char * address2;
+int main(int argc, char **argv)
+{
+  char *address1;
+  char *address2;
 
   printf("mm_test\n");
 

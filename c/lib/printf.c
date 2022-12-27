@@ -70,16 +70,16 @@ printf(fmt, i, j);
  *****************************************************************************/
 PUBLIC int printf(const char *fmt, ...)
 {
-	int i;
-	char buf[STR_DEFAULT_LEN];
+  int i;
+  char buf[STR_DEFAULT_LEN];
 
-	va_list arg = (va_list)((char*)(&fmt) + 4);        /* 4 是参数 fmt 所占堆栈中的大小 */
-	i = vsprintf(buf, fmt, arg);
-	int c = write(1, buf, i);
+  va_list arg = (va_list)((char *)(&fmt) + 4); /* 4 是参数 fmt 所占堆栈中的大小 */
+  i = vsprintf(buf, fmt, arg);
+  int c = write(1, buf, i);
 
-	assert(c == i);
+  assert(c == i);
 
-	return i;
+  return i;
 }
 
 /*****************************************************************************
@@ -94,16 +94,15 @@ PUBLIC int printf(const char *fmt, ...)
  *****************************************************************************/
 PUBLIC int printl(const char *fmt, ...)
 {
-	int i;
-	char buf[STR_DEFAULT_LEN/2];
+  int i;
+  char buf[STR_DEFAULT_LEN / 2];
 
-	va_list arg = (va_list)((char*)(&fmt) + 4); /**
+  va_list arg = (va_list)((char *)(&fmt) + 4); /**
 						     * 4: size of `fmt' in
 						     *    the stack
 						     */
-	i = vsprintf(buf, fmt, arg);
-	printx(buf);
+  i = vsprintf(buf, fmt, arg);
+  printx(buf);
 
-	return i;
+  return i;
 }
-
