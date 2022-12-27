@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   wait.c
  * @brief  wait()
@@ -29,14 +29,14 @@
  * 
  * @return  PID of the terminated child.
  *****************************************************************************/
-PUBLIC int wait(int * status)
+PUBLIC int wait(int *status)
 {
-	MESSAGE msg;
-	msg.type   = WAIT;
+  MESSAGE msg;
+  msg.type = WAIT;
 
-	send_recv(BOTH, TASK_MM, &msg);
+  send_recv(BOTH, TASK_MM, &msg);
 
-	*status = msg.STATUS;
+  *status = msg.STATUS;
 
-	return (msg.PID == NO_TASK ? -1 : msg.PID);
+  return (msg.PID == NO_TASK ? -1 : msg.PID);
 }

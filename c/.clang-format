@@ -1,6 +1,6 @@
 ---
 Language: Cpp
-AlignTrailingComments: false
+ReflowComments: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true

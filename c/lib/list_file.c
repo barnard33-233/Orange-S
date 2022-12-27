@@ -10,17 +10,17 @@
 #include "global.h"
 #include "proto.h"
 
-
-PUBLIC char* list_file(char* path) {
-    MESSAGE msg;
-    msg.type = SEARCH;
-    // msg.pBUF[0] = 'y';
-    // msg.pBUF[1] = 'j';
-    // msg.pBUF[2] = 'q';
-    memcpy(msg.pBUF, path, strlen(path));
-    // printl("msg.pBUF address is %d\n", msg.pBUF);
-    // printl("BUF : %s\n", msg.pBUF);
-    send_recv(BOTH, TASK_FS, &msg);
-    // return msg.BUF;
-    return msg.pBUF;
+PUBLIC char *list_file(char *path)
+{
+  MESSAGE msg;
+  msg.type = SEARCH;
+  // msg.pBUF[0] = 'y';
+  // msg.pBUF[1] = 'j';
+  // msg.pBUF[2] = 'q';
+  memcpy(msg.pBUF, path, strlen(path));
+  // printl("msg.pBUF address is %d\n", msg.pBUF);
+  // printl("BUF : %s\n", msg.pBUF);
+  send_recv(BOTH, TASK_FS, &msg);
+  // return msg.BUF;
+  return msg.pBUF;
 }

@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   mm/main.c
  * @brief  Orange'S Memory Management.
@@ -25,7 +25,7 @@ PUBLIC void do_fork_test();
 
 PRIVATE void init_mm();
 
-PRIVATE char * mm_alloc_page(u32 * );
+PRIVATE char *mm_alloc_page(u32 *);
 PRIVATE void mm_free_page(u32 *, char *);
 /*****************************************************************************
  *                                task_mm
@@ -36,48 +36,51 @@ PRIVATE void mm_free_page(u32 *, char *);
  *****************************************************************************/
 PUBLIC void task_mm()
 {
-	u32 bitmap = 0;
-	init_mm();
+  u32 bitmap = 0;
+  init_mm();
 
-	while (1) {
-		send_recv(RECEIVE, ANY, &mm_msg);
-		int src = mm_msg.source;
-		int reply = 1;
+  while (1)
+    {
+      send_recv(RECEIVE, ANY, &mm_msg);
+      int src = mm_msg.source;
+      int reply = 1;
 
-		int msgtype = mm_msg.type;
+      int msgtype = mm_msg.type;
 
-		switch (msgtype) {
-		case FORK:
-			mm_msg.RETVAL = do_fork();
-			break;
-		case EXIT:
-			do_exit(mm_msg.STATUS);
-			reply = 0;
-			break;
-		case EXEC:
-			mm_msg.RETVAL = do_exec();
-			break;
-		case WAIT:
-			do_wait();
-			reply = 0;
-			break;
-		case MM_ALLOC:
-			mm_msg.ADDRESS = mm_alloc_page(&bitmap);
-			break;
-		case MM_FREE:
-			mm_free_page(&bitmap, mm_msg.ADDRESS);
-			break;
-		default:
-			dump_msg("MM::unknown msg", &mm_msg);
-			assert(0);
-			break;
-		}
+      switch (msgtype)
+        {
+        case FORK:
+          mm_msg.RETVAL = do_fork();
+          break;
+        case EXIT:
+          do_exit(mm_msg.STATUS);
+          reply = 0;
+          break;
+        case EXEC:
+          mm_msg.RETVAL = do_exec();
+          break;
+        case WAIT:
+          do_wait();
+          reply = 0;
+          break;
+        case MM_ALLOC:
+          mm_msg.ADDRESS = mm_alloc_page(&bitmap);
+          break;
+        case MM_FREE:
+          mm_free_page(&bitmap, mm_msg.ADDRESS);
+          break;
+        default:
+          dump_msg("MM::unknown msg", &mm_msg);
+          assert(0);
+          break;
+        }
 
-		if (reply) {
-			mm_msg.type = SYSCALL_RET;
-			send_recv(SEND, src, &mm_msg);
-		}
-	}
+      if (reply)
+        {
+          mm_msg.type = SYSCALL_RET;
+          send_recv(SEND, src, &mm_msg);
+        }
+    }
 }
 
 /*****************************************************************************
@@ -89,43 +92,49 @@ PUBLIC void task_mm()
  *****************************************************************************/
 PRIVATE void init_mm()
 {
-	struct boot_params bp;
-	get_boot_params(&bp);
+  struct boot_params bp;
+  get_boot_params(&bp);
 
-	memory_size = bp.mem_size;
+  memory_size = bp.mem_size;
 
-	/* print memory size */
-	printl("{MM} memsize:%dMB\n", memory_size / (1024 * 1024));
+  /* print memory size */
+  printl("{MM} memsize:%dMB\n", memory_size / (1024 * 1024));
 }
 
 /*
  * a demo of allocate page.
  * only works in ring 1.
 */
-PRIVATE char * mm_alloc_page(u32 * bitmap){
-	if(*bitmap == 0xffffffff){
-		return NULL;
-	}
-	// find the first free slot:
-	u32 mask = 1;
-	int i;
-	for(i = 0; i < 32; i ++){
-		mask << 1;
-		if(!(mask & *bitmap)){ // if selected bit == 1
-			break;
-		}
-	}
-	char * address = free_mem_area + i * PAGE_SIZE;
-	*bitmap |= mask;
-	return address;
+PRIVATE char *mm_alloc_page(u32 *bitmap)
+{
+  if (*bitmap == 0xffffffff)
+    {
+      return NULL;
+    }
+  // find the first free slot:
+  u32 mask = 1;
+  int i;
+  for (i = 0; i < 32; i++)
+    {
+      mask << 1;
+      if (!(mask & *bitmap))
+        { // if selected bit == 1
+          break;
+        }
+    }
+  char *address = free_mem_area + i * PAGE_SIZE;
+  *bitmap |= mask;
+  return address;
 }
 
-PRIVATE void mm_free_page(u32 * bitmap, char * address){
-	int position = (address - free_mem_area) / PAGE_SIZE;
-	if(position >= 0 && position < 32){
-		u32 mask = ~(1 << position);
-		*bitmap &= mask;
-	}
+PRIVATE void mm_free_page(u32 *bitmap, char *address)
+{
+  int position = (address - free_mem_area) / PAGE_SIZE;
+  if (position >= 0 && position < 32)
+    {
+      u32 mask = ~(1 << position);
+      *bitmap &= mask;
+    }
 }
 
 /*****************************************************************************
@@ -141,21 +150,19 @@ PRIVATE void mm_free_page(u32 * bitmap, char * address){
  *****************************************************************************/
 PUBLIC int alloc_mem(int pid, int memsize)
 {
-	assert(pid >= (NR_TASKS + NR_NATIVE_PROCS));
-	if (memsize > PROC_IMAGE_SIZE_DEFAULT) {
-		panic("unsupported memory request: %d. "
-		      "(should be less than %d)",
-		      memsize,
-		      PROC_IMAGE_SIZE_DEFAULT);
-	}
+  assert(pid >= (NR_TASKS + NR_NATIVE_PROCS));
+  if (memsize > PROC_IMAGE_SIZE_DEFAULT)
+    {
+      panic("unsupported memory request: %d. "
+            "(should be less than %d)",
+            memsize, PROC_IMAGE_SIZE_DEFAULT);
+    }
 
-	int base = PROCS_BASE +
-		(pid - (NR_TASKS + NR_NATIVE_PROCS)) * PROC_IMAGE_SIZE_DEFAULT;
+  int base = PROCS_BASE + (pid - (NR_TASKS + NR_NATIVE_PROCS)) * PROC_IMAGE_SIZE_DEFAULT;
 
-	if (base + memsize >= memory_size)
-		panic("memory allocation failed. pid:%d", pid);
+  if (base + memsize >= memory_size) panic("memory allocation failed. pid:%d", pid);
 
-	return base;
+  return base;
 }
 
 /*****************************************************************************
@@ -173,5 +180,5 @@ PUBLIC int alloc_mem(int pid, int memsize)
  *****************************************************************************/
 PUBLIC int free_mem(int pid)
 {
-	return 0;
+  return 0;
 }

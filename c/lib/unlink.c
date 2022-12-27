@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   unlink.c
  * @brief  
@@ -29,15 +29,15 @@
  * 
  * @return Zero if successful, otherwise -1.
  *****************************************************************************/
-PUBLIC int unlink(const char * pathname)
+PUBLIC int unlink(const char *pathname)
 {
-	MESSAGE msg;
-	msg.type   = UNLINK;
+  MESSAGE msg;
+  msg.type = UNLINK;
 
-	msg.PATHNAME	= (void*)pathname;
-	msg.NAME_LEN	= strlen(pathname);
+  msg.PATHNAME = (void *)pathname;
+  msg.NAME_LEN = strlen(pathname);
 
-	send_recv(BOTH, TASK_FS, &msg);
+  send_recv(BOTH, TASK_FS, &msg);
 
-	return msg.RETVAL;
+  return msg.RETVAL;
 }

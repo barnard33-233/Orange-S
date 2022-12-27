@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   lseek.c
  * @brief  seek()
@@ -19,7 +19,6 @@
 #include "global.h"
 #include "proto.h"
 
-
 /*****************************************************************************
  *                                lseek
  *****************************************************************************/
@@ -35,13 +34,13 @@
  *****************************************************************************/
 PUBLIC int lseek(int fd, int offset, int whence)
 {
-	MESSAGE msg;
-	msg.type   = LSEEK;
-	msg.FD     = fd;
-	msg.OFFSET = offset;
-	msg.WHENCE = whence;
+  MESSAGE msg;
+  msg.type = LSEEK;
+  msg.FD = fd;
+  msg.OFFSET = offset;
+  msg.WHENCE = whence;
 
-	send_recv(BOTH, TASK_FS, &msg);
+  send_recv(BOTH, TASK_FS, &msg);
 
-	return msg.OFFSET;
+  return msg.OFFSET;
 }

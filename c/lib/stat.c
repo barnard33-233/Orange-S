@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   stat.c
  * @brief  
@@ -19,7 +19,6 @@
 #include "global.h"
 #include "proto.h"
 
-
 /*****************************************************************************
  *                                stat
  *************************************************************************//**
@@ -32,16 +31,16 @@
  *****************************************************************************/
 PUBLIC int stat(const char *path, struct stat *buf)
 {
-	MESSAGE msg;
+  MESSAGE msg;
 
-	msg.type	= STAT;
+  msg.type = STAT;
 
-	msg.PATHNAME	= (void*)path;
-	msg.BUF		= (void*)buf;
-	msg.NAME_LEN	= strlen(path);
+  msg.PATHNAME = (void *)path;
+  msg.BUF = (void *)buf;
+  msg.NAME_LEN = strlen(path);
 
-	send_recv(BOTH, TASK_FS, &msg);
-	assert(msg.type == SYSCALL_RET);
+  send_recv(BOTH, TASK_FS, &msg);
+  assert(msg.type == SYSCALL_RET);
 
-	return msg.RETVAL;
+  return msg.RETVAL;
 }
