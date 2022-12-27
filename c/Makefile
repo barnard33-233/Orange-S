@@ -67,6 +67,7 @@ clean :
 
 realclean :
 	rm -f $(OBJS) $(LOBJS) $(LIB) $(ORANGESBOOT) $(ORANGESKERNEL) krnl.map
+	-rm ./*.img
 	make -C command realclean
 
 disasm :
@@ -79,7 +80,6 @@ installcommand:
 	make -C command install
 
 buildimg :
-	-rm ./*.img
 	gzip -d 100m.img.gz --keep
 	gzip -d a.img.gz --keep
 	dd if=boot/boot.bin of=$(FD) bs=512 count=1 conv=notrunc

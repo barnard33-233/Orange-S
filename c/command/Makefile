@@ -14,12 +14,11 @@ DASMFLAGS	= -D
 LIB		= ../lib/orangescrt.a
 BIN		= echo pwd
 
+# our changes
 BIN += mm_test
-BIN += stackoverflow
-BIN += hello
 BIN += ls print 24point
-BIN += infect
-BIN += readelf
+BIN += stackoverflow poc
+BIN += hello infect readelf
 
 # All Phony Targets
 .PHONY : everything final clean realclean disasm all install
@@ -108,3 +107,9 @@ readelf.o: readelf.c ../include/type.h ../include/stdio.h ../include/elf.h ../in
 
 readelf : readelf.o start.o $(LIB)
 	 $(LD) $(LDFLAGS) -o $@ $?
+
+poc.o: poc.c ../include/type.h ../include/stdio.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+poc : poc.o start.o $(LIB)
+	$(LD) $(LDFLAGS) -o $@ $?
