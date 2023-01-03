@@ -15,6 +15,7 @@ int main(int argc, char **argv)
   printf("address2=%x\n", address2);
 
   free(address1);
+  address1 = (char*)0;
 
   address1 = alloc();
   printf("address1=%x\n", address1);
