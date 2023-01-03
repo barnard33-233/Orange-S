@@ -4,7 +4,6 @@
 *.map
 *.img
 *.a
-**/.clang-format
 /c/command/*
 !/c/command/Makefile
 !/c/command/*.c
