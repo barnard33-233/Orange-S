@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   fork.c
  * @brief  
@@ -19,7 +19,6 @@
 #include "global.h"
 #include "proto.h"
 
-
 /*****************************************************************************
  *                                fork
  *****************************************************************************/
@@ -34,31 +33,33 @@
  *****************************************************************************/
 PUBLIC int fork()
 {
-	MESSAGE msg;
-	msg.type = FORK;
+  MESSAGE msg;
+  msg.type = FORK;
 
-	send_recv(BOTH, TASK_MM, &msg);
-	assert(msg.type == SYSCALL_RET);
-	assert(msg.RETVAL == 0);
+  send_recv(BOTH, TASK_MM, &msg);
+  assert(msg.type == SYSCALL_RET);
+  assert(msg.RETVAL == 0);
 
-	return msg.PID;
+  return msg.PID;
 }
 
-PUBLIC void * alloc(void){
-	MESSAGE msg;
-	msg.type = MM_ALLOC;
+PUBLIC void *alloc(void)
+{
+  MESSAGE msg;
+  msg.type = MM_ALLOC;
 
-	send_recv(BOTH, TASK_MM, &msg);
-	assert(msg.type == SYSCALL_RET);
+  send_recv(BOTH, TASK_MM, &msg);
+  assert(msg.type == SYSCALL_RET);
 
-	return msg.ADDRESS;
+  return msg.ADDRESS;
 }
 
-PUBLIC void free(void * address){
-	MESSAGE msg;
-	msg.type = MM_FREE;
-	msg.ADDRESS = address;
+PUBLIC void free(void *address)
+{
+  MESSAGE msg;
+  msg.type = MM_FREE;
+  msg.ADDRESS = address;
 
-	send_recv(BOTH, TASK_MM, &msg);
-	assert(msg.type == SYSCALL_RET);
+  send_recv(BOTH, TASK_MM, &msg);
+  assert(msg.type == SYSCALL_RET);
 }

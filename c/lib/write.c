@@ -1,4 +1,4 @@
-/*************************************************************************//**
+/*************************************************************************/ /**
  *****************************************************************************
  * @file   write.c
  * @brief  write()
@@ -34,13 +34,13 @@
  *****************************************************************************/
 PUBLIC int write(int fd, const void *buf, int count)
 {
-	MESSAGE msg;
-	msg.type = WRITE;
-	msg.FD   = fd;
-	msg.BUF  = (void*)buf;
-	msg.CNT  = count;
+  MESSAGE msg;
+  msg.type = WRITE;
+  msg.FD = fd;
+  msg.BUF = (void *)buf;
+  msg.CNT = count;
 
-	send_recv(BOTH, TASK_FS, &msg);
+  send_recv(BOTH, TASK_FS, &msg);
 
-	return msg.CNT;
+  return msg.CNT;
 }
